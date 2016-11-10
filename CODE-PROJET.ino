@@ -11,6 +11,15 @@ int value2;
 int value3;
 int value4;
 
+void couleurcapteur (int valeur)
+{
+  if (valeur>500)
+  {
+   Robot.stroke(255, 0, 0); 
+  }
+  else 
+  Robot.stroke(0, 255, 0);
+}
 
 void setup()
 {
@@ -53,7 +62,7 @@ void loop()
    //**************************************
    
    value0=Robot.IRarray[0];
-   Robot.stroke(0, 255, 0);
+   couleurcapteur(value0);
    Robot.textSize(2);
    Robot.text(value0, 80,0 );  
  
@@ -62,7 +71,7 @@ void loop()
   //**************************************
   
    value1=Robot.IRarray[1];
-   Robot.stroke(0, 255, 0);
+   couleurcapteur(value1);
    Robot.textSize(2);
    Robot.text(value1, 80,30 );  
    
@@ -71,7 +80,7 @@ void loop()
   //**************************************
   
    value2=Robot.IRarray[2];
-   Robot.stroke(0, 255, 0);
+   couleurcapteur(value2);
    Robot.textSize(2);
    Robot.text(value2, 80,60 ); 
   
@@ -80,7 +89,7 @@ void loop()
   //**************************************
    
    value3=Robot.IRarray[3];
-   Robot.stroke(0, 255, 0);
+   couleurcapteur(value3);
    Robot.textSize(2);
    Robot.text(value3, 80,90 );  
 
@@ -90,13 +99,13 @@ void loop()
   //**************************************
    
    value4=Robot.IRarray[4];
-   Robot.stroke(0, 255, 0);
+   couleurcapteur(value4);
    Robot.textSize(2);
    Robot.text(value4, 80,120 );  
    
 // POUR METTRE À JOUR LA VALEUR DES CAPTEURS INFRA-ROUGE
  
-  delay(1000);
+  delay(250);
    
   Robot.stroke(255, 255, 255);
   Robot.textSize(2);
@@ -118,7 +127,6 @@ void loop()
   Robot.textSize(2);
   Robot.text(value4, 80,120 );
   
-  // APPEL DES FONCTIONS
    avance_tout_droit (value0, value1, value2, value3, value4) ;
    tourne_a_gauche (value0, value1, value2, value3, value4) ;
    tourne_a_droite (value0, value1, value2, value3, value4) ;
@@ -131,28 +139,28 @@ void loop()
   void arrete_toi() 
   { 
     Robot.motorsWrite(0,0); 
-   // delay(1000); 
+    delay(500); 
   } 
   
 // AVANCE
   void avance() 
   { 
     Robot.motorsWrite(90,90); 
-   // delay(1000); 
+    delay(500); 
   }  
 
 // TOURNE À DROITE
   void tournedroite() 
   { 
     Robot.motorsWrite(90,0); 
-  //  delay(1000); 
+    delay(500); 
   }  
   
 // TOURNE À GAUCHE
   void tournegauche() 
   { 
     Robot.motorsWrite(0,90); 
-   // delay(1000); 
+    delay(500);  
   } 
   
   
