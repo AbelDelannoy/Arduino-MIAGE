@@ -2,7 +2,8 @@
 #include <Wire.h>
 #include <SPI.h>
 
-// DELCARATION DES VALEURS POUR LES CAPTEURS
+
+// DELCARATION DES VALEURS POUR LES CAPTEURS TOTO
 int value0;
 int value1;
 int value2;
