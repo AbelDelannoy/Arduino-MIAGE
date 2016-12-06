@@ -1,0 +1,163 @@
+/*
+        PROGRAMME AVEC LES 3 PREMIERS CAPTEURS ir4 ir3 ir2 et ir0 capteur à droite  :-) 
+ */
+
+#include <ArduinoRobot.h>
+#include <Wire.h>
+#include <SPI.h>
+
+// DECLARATION DES VALEURS POUR LES CAPTEURS
+
+int ir0;
+int ir1;
+int ir2;
+int ir3;
+int ir4;
+int vit;
+int arriver = 0;
+
+//la vitesse de la roue faible lors d'une rotation
+int vitesse2 = 0;
+
+
+
+//**************************************
+//*               SETUP                *
+//**************************************
+
+void setup()
+{
+  Robot.begin();   
+}
+
+//**************************************
+//*                LOOP                *
+//**************************************
+void loop(){
+
+  //POTENTIOMETRE
+  vit = Robot.knobRead() ; // cette valeur est compris entre 0 et 1023
+  vit = map(vit, 0, 1023, 50, 255); // la fonction va permettre de changer la valeur de 0 à 1023 vers une valeur de 0 à 255 (mise à l echelle)
+  
+  // etat des capteurs
+  Robot.updateIR();
+  if (Robot.IRarray[0] < 300){ ir0 = 1; } else { ir0 = 0; }
+  if (Robot.IRarray[1] < 300){ ir1 = 1; } else { ir1 = 0; }
+  if (Robot.IRarray[2] < 300){ ir2 = 1; } else { ir2 = 0; }
+  if (Robot.IRarray[3] < 300){ ir3 = 1; } else { ir3 = 0; }
+  if (Robot.IRarray[4] < 300){ ir4 = 1; } else { ir4 = 0; }
+
+if (arriver == 1){
+  // TODO : faire la musique
+}
+
+// PAS ENCORE ARRIVER
+if (arriver == 0){
+  if (ir0 == 0){
+    //CAS NORMAL
+    if(ir4 == 1 && ir3 == 1 && ir2 == 1){
+      avance_tout_droit();
+    }
+     //AJUSTEMENT LIGNE
+    else if(ir4 == 0 && ir3 == 1 && ir2 == 1){
+        ajust_droite();
+    }
+    else if(ir4 == 1 && ir3 == 1 && ir2 == 0){
+        ajust_gauche();
+    }
+    else if(ir4 == 0 && ir3 == 0 && ir2 == 1){
+        tourne_droite();
+    }
+    else if(ir4 == 1 && ir3 == 0 && ir2 == 0){
+        tourne_gauche();
+    }
+    
+    //AUCUNE LIGNE
+    else if(ir1 == 0 && ir2 == 0 && ir3 == 0 && ir4 == 0){
+      tourne_gauche();
+    }
+    else{
+      arrete_toi();
+    }
+  }
+}
+  
+  // TRAITEMENT ARRIVER  
+  
+  else if(ir1 == 1  && ir2 == 1 && ir3 == 1 && ir4 == 1){
+    avancer_arriver();
+    
+    if(ir1 == 1  && ir2 == 1 && ir3 == 1 && ir4 == 1){
+      arriver = 1;
+    }
+    else{
+      //récupérer la ligne
+      tourne_droite();//<------------------------------------------mettre un délais ?
+    }
+  }
+  
+  else{
+     // priorité si capteur 0 détecté tourne a droite 
+     tourne_droite();
+   }
+}
+
+//**************************************
+//*           LES FONCTIONS            *
+//**************************************
+// AVANCE POUR TEST ARRIVER
+void avancer_arriver() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite(vit,vit);
+  delay(500);  // <---------------------------------- à VERFIER
+} 
+// RECULE
+void recule() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite(-vit,-vit);  
+} 
+// ARRIVER
+void arrete_toi() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite(0,0);  
+} 
+// AJUSTEMENT GAUCHE
+void ajust_gauche() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite((vit*0.8),vit);  
+} 
+// AJUSTEMENT DROITE
+void ajust_droite() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite(vit,(vit*0.8));  
+} 
+// TOURNE LENTEMENT SUR LA GAUCHE
+void recup_gauche() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite(80,150);  
+} 
+
+// AVANCE
+void avance_tout_droit() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite(vit,vit); 
+} 
+// TOURNER A GAUCHE
+void tourne_gauche() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite(-vit,vit); 
+}
+// TOURNER A DROITE
+void tourne_droite() 
+{ 
+  Robot.motorsStop();
+  Robot.motorsWrite(vit,-vit); 
+}
