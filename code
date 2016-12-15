@@ -94,14 +94,14 @@ void loop(){
 
           while(stop1 == 0 && millis() > 5000){
             
-             // etat des capteurs
+            // etat des capteurs
               Robot.updateIR();
               if (Robot.IRarray[0] < 400){ ir0 = 1; } else { ir0 = 0; }
               if (Robot.IRarray[1] < 400){ ir1 = 1; } else { ir1 = 0; }
               if (Robot.IRarray[2] < 400){ ir2 = 1; } else { ir2 = 0; }
               if (Robot.IRarray[3] < 400){ ir3 = 1; } else { ir3 = 0; }
               if (Robot.IRarray[4] < 400){ ir4 = 1; } else { ir4 = 0; }
-
+                    
             if(ir0 == 1 && ir1 == 1 && ir2 == 1 && ir3 == 1 && ir4 == 1){
               
               arrete_toi();
@@ -115,18 +115,23 @@ void loop(){
               }
             }
             else{
-              stop1 = 1;
-              tourne_droite_ar(vit);
-
+              if(ir0 == 0){
+                while(ir0 == 0){
+                  tourne_droite(vit*0.5);
+                 // etat des capteurs
+                  Robot.updateIR();
+                  if (Robot.IRarray[0] < 400){ ir0 = 1; } else { ir0 = 0; }
+                  if (Robot.IRarray[1] < 400){ ir1 = 1; } else { ir1 = 0; }
+                  if (Robot.IRarray[2] < 400){ ir2 = 1; } else { ir2 = 0; }
+                  if (Robot.IRarray[3] < 400){ ir3 = 1; } else { ir3 = 0; }
+                  if (Robot.IRarray[4] < 400){ ir4 = 1; } else { ir4 = 0; }
+                }
+              }
+              else {
+                tourne_droite_ar(vit*0.6);
+              }
+               stop1 = 1;
             }
-            
-            // etat des capteurs
-            Robot.updateIR();
-            if (Robot.IRarray[0] < 400){ ir0 = 1; } else { ir0 = 0; }
-            if (Robot.IRarray[1] < 400){ ir1 = 1; } else { ir1 = 0; }
-            if (Robot.IRarray[2] < 400){ ir2 = 1; } else { ir2 = 0; }
-            if (Robot.IRarray[3] < 400){ ir3 = 1; } else { ir3 = 0; }
-            if (Robot.IRarray[4] < 400){ ir4 = 1; } else { ir4 = 0; }
             
           }
         }
@@ -144,14 +149,15 @@ void loop(){
 //**************************************
 //*           LES FONCTIONS            *
 //**************************************
+
 // AVANCE POUR TEST ARRIVER
 void avancer_arriver(int vit) 
 { 
   Robot.motorsStop();
-  Robot.motorsWrite(80,80); 
-  delay(150); 
+  Robot.motorsWrite(vit,vit); 
+  delay(100); 
 } 
-// AARRIVER
+// ARRIVER
 void arriver42() 
 { 
   Robot.motorsStop();
@@ -224,5 +230,5 @@ void tourne_droite_ar(int vit)
 { 
   Robot.motorsStop();
   Robot.motorsWrite(vit,-vit); 
-  delay(200);
+  delay(350);
 }
