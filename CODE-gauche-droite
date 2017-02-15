@@ -1,0 +1,34 @@
+
+#include <ArduinoRobot.h> // include the robot library
+#include <Wire.h>
+#include <SPI.h>
+
+void setup() {
+  Robot.begin();
+  Robot.beginSD();
+  Robot.beginTFT();
+}
+
+void loop() {
+  // read the butttons on the robot
+  int key = 0;
+  int gauche = 0;
+  int droite = 0;
+  delay(100);
+  key = Robot.keyboardRead();
+    if( key == BUTTON_LEFT){
+       Robot.stroke(0, 0, 0);    
+       Robot.text("programme tourne gauche", 0, 0);
+       gauche = 200;
+      
+    }
+    if( key == BUTTON_RIGHT){
+      Robot.stroke(0, 0, 0);    
+      Robot.text("programme tourne droite", 0, 100);
+      droite = 200;
+    }
+   if (gauche == 200 || droite == 200){ 
+     Robot.motorsStop();
+     Robot.motorsWrite(droite,gauche);
+   }
+}
